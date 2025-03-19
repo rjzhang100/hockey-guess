@@ -2,11 +2,11 @@ import { TRPCError } from "@trpc/server";
 import { JWT_SECRET } from "../consts/env";
 import User from "../models/User";
 import jwt from "jsonwebtoken";
-import { publicProcedure, router } from "../trpc/trpc";
+import { Context, publicProcedure, router } from "../trpc/trpc";
 import { z } from "zod";
-import { Response } from "express";
+import { CONSTS } from "../consts/consts";
 
-const loginUser = async (userData: any, res: Response) => {
+const loginUser = async (userData: any, ctx: Context) => {
   try {
     const { email, password } = userData;
     const user = await User.findOne({
@@ -34,11 +34,11 @@ const loginUser = async (userData: any, res: Response) => {
         expiresIn: "1h",
       }
     );
-    res.cookie("token", token, {
-      httpOnly: true, // Prevent JavaScript access to the cookie
-      secure: process.env.NODE_ENV === "production", // Only set the cookie over HTTPS in production
+    ctx.res.cookie(CONSTS.TOKEN_COOKIE_KEY, token, {
+      httpOnly: true,
+      secure: true,
       sameSite: "strict",
-      maxAge: 3600000,
+      maxAge: 60 * 60 * 1000,
     });
   } catch (err) {
     throw new TRPCError({
@@ -49,16 +49,16 @@ const loginUser = async (userData: any, res: Response) => {
 };
 
 const authRouter = router({
-  //   loginUser: publicProcedure
-  //     .input(
-  //       z.object({
-  //         email: z.string(),
-  //         password: z.string(),
-  //       })
-  //     )
-  //     .mutation(async (opts) => {
-  //       return await loginUser(opts.input, opts.ctx.res);
-  //     }),
+  loginUser: publicProcedure
+    .input(
+      z.object({
+        email: z.string(),
+        password: z.string(),
+      })
+    )
+    .mutation(async (opts) => {
+      return await loginUser(opts.input, opts.ctx);
+    }),
 });
 
 export default authRouter;

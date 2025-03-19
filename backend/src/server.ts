@@ -9,6 +9,8 @@ import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import dbUserRouter from "./api/dbUserRoutes";
 import nhlRouter from "./api/nhlRoutes";
 import authRouter from "./api/authRoutes";
+import cookieParser from "cookie-parser";
+import { createExpressMiddleware } from "@trpc/server/adapters/express";
 
 dotenv.config();
 
@@ -16,6 +18,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const appRouter = router({
   db: dbUserRouter,
@@ -41,9 +44,16 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-connectMongoDB().then(() => {
-  const server = createHTTPServer({
+app.use(
+  "/api",
+  createExpressMiddleware({
     router: appRouter,
+    createContext,
+  })
+);
+
+connectMongoDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
   });
-  server.listen(PORT);
 });

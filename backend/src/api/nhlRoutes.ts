@@ -1,11 +1,11 @@
-import { publicProcedure, router } from "../trpc/trpc";
+import { protectedProcedure, publicProcedure, router } from "../trpc/trpc";
 import axios from "axios";
 import { NHL_API } from "../consts/env";
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 
 const nhlRouter = router({
-  getTodaysGames: publicProcedure.query(async () => {
+  getTodaysGames: protectedProcedure.query(async () => {
     try {
       const response = await axios.get(`${NHL_API}/latest`);
       if (!response) {
