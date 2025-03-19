@@ -4,9 +4,11 @@ import cors from "cors";
 import { ServerApiVersion } from "mongodb";
 import { MONGODB_URI, PATH_TO_MONGODB_CERT, PORT } from "./consts/env";
 import mongoose from "mongoose";
-import { publicProcedure, router } from "./trpc/trpc";
+import { createContext, router } from "./trpc/trpc";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
-import dbRouter from "./api/dbRoutes";
+import dbUserRouter from "./api/dbUserRoutes";
+import nhlRouter from "./api/nhlRoutes";
+import authRouter from "./api/authRoutes";
 
 dotenv.config();
 
@@ -16,7 +18,9 @@ app.use(cors());
 app.use(express.json());
 
 const appRouter = router({
-  db: dbRouter,
+  db: dbUserRouter,
+  nhl: nhlRouter,
+  auth: authRouter,
 });
 
 const connectMongoDB = async () => {
