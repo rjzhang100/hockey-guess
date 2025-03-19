@@ -26,6 +26,8 @@ const appRouter = router({
   auth: authRouter,
 });
 
+export type AppRouter = typeof appRouter;
+
 const connectMongoDB = async () => {
   try {
     await mongoose.connect(MONGODB_URI, {

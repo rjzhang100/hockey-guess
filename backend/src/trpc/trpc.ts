@@ -10,9 +10,9 @@ export function createContext({ req, res }: CreateExpressContextOptions) {
   return { req, res };
 }
 
-export type Context = Awaited<ReturnType<typeof createContext>>;
-
-const verifyToken = ({ req }: { req: Express.Request }) => {};
+export type Context = Awaited<ReturnType<typeof createContext>> & {
+  decodedToken?: any;
+};
 
 const t = initTRPC.context<Context>().create();
 export const router = t.router;

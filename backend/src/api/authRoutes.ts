@@ -2,7 +2,12 @@ import { TRPCError } from "@trpc/server";
 import { JWT_SECRET } from "../consts/env";
 import User from "../models/User";
 import jwt from "jsonwebtoken";
-import { Context, publicProcedure, router } from "../trpc/trpc";
+import {
+  Context,
+  protectedProcedure,
+  publicProcedure,
+  router,
+} from "../trpc/trpc";
 import { z } from "zod";
 import { CONSTS } from "../consts/consts";
 
@@ -40,6 +45,8 @@ const loginUser = async (userData: any, ctx: Context) => {
       sameSite: "strict",
       maxAge: 60 * 60 * 1000,
     });
+
+    return true;
   } catch (err) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
@@ -59,6 +66,9 @@ const authRouter = router({
     .mutation(async (opts) => {
       return await loginUser(opts.input, opts.ctx);
     }),
+  checkLoggedIn: protectedProcedure.query(() => {
+    return true;
+  }),
 });
 
 export default authRouter;
