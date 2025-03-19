@@ -6,6 +6,7 @@ import { MONGODB_URI, PATH_TO_MONGODB_CERT, PORT } from "./consts/env";
 import mongoose from "mongoose";
 import { publicProcedure, router } from "./trpc/trpc";
 import { createHTTPServer } from "@trpc/server/adapters/standalone";
+import dbRouter from "./api/dbRoutes";
 
 dotenv.config();
 
@@ -15,11 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 const appRouter = router({
-  hello: publicProcedure.query(() => {
-    return {
-      message: "Hello World",
-    };
-  }),
+  db: dbRouter,
 });
 
 const connectMongoDB = async () => {
@@ -31,8 +28,6 @@ const connectMongoDB = async () => {
     console.log("Connected to mongodb");
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
-  } finally {
-    mongoose.disconnect();
   }
 };
 

@@ -1,6 +1,6 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-const userSchema = new Schema(
+import mongoose, { CallbackError, Schema } from "mongoose";
+import { compare, hash } from "bcrypt";
+const UserSchema = new Schema<IUser>(
   {
     name: {
       type: String,
@@ -11,19 +11,45 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    password: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-interface IUser extends Document {
+UserSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+  try {
+    const saltRounds = 8;
+    const hashed = await hash(this.password, saltRounds);
+    this.password = hashed;
+    next();
+  } catch (err) {
+    next(err as CallbackError);
+  }
+});
+
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string
+) {
+  return compare(candidatePassword, this.password);
+};
+
+export interface IUser {
   name: string;
   email: string;
-  createdAt: Date;
-  updatedAt: Date;
+  password: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-const User = mongoose.model<IUser>("User", userSchema);
+const User = mongoose.model<IUser>("User", UserSchema);
 
 export default User;
