@@ -9,10 +9,12 @@ const insertUser = async (userData: any) => {
       ...userData,
     });
     await user.save();
+    console.log(user);
     return user;
   } catch (err) {
+    console.log(err);
     throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
+      code: "CONFLICT",
       message: `Failed to insert user: ${(err as Error).message}`,
     });
   }
@@ -48,7 +50,11 @@ const dbUserRouter = router({
       })
     )
     .mutation(async (opts) => {
-      return await insertUser(opts.input);
+      try {
+        return await insertUser(opts.input);
+      } catch (err) {
+        throw err;
+      }
     }),
   getUser: publicProcedure
     .input(

@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import TodayGames from "../../components/TodayGames/TodayGames";
 
 const Home = () => {
-  useEffect(() => {}, []);
-
   return (
     <>
-      <div>HELLO HOME</div>
+      <div>
+        <div>Welcome to the Bobo Hockey Guessing Page</div>
+        <TodayGames />
+      </div>
     </>
   );
 };

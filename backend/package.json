@@ -10,8 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@trpc/client": "^11.0.0-rc.833",
-    "@trpc/server": "^11.0.0-rc.833",
+    "@trpc/server": "10.45.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

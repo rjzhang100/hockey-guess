@@ -5,7 +5,6 @@ import { ServerApiVersion } from "mongodb";
 import { MONGODB_URI, PATH_TO_MONGODB_CERT, PORT } from "./consts/env";
 import mongoose from "mongoose";
 import { createContext, router } from "./trpc/trpc";
-import { createHTTPServer } from "@trpc/server/adapters/standalone";
 import dbUserRouter from "./api/dbUserRoutes";
 import nhlRouter from "./api/nhlRoutes";
 import authRouter from "./api/authRoutes";
@@ -16,7 +15,12 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 

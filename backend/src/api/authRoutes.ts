@@ -41,11 +41,10 @@ const loginUser = async (userData: any, ctx: Context) => {
     );
     ctx.res.cookie(CONSTS.TOKEN_COOKIE_KEY, token, {
       httpOnly: true,
-      secure: true,
+      secure: false,
       sameSite: "strict",
       maxAge: 60 * 60 * 1000,
     });
-
     return true;
   } catch (err) {
     throw new TRPCError({
@@ -67,7 +66,10 @@ const authRouter = router({
       return await loginUser(opts.input, opts.ctx);
     }),
   checkLoggedIn: protectedProcedure.query(() => {
-    return true;
+    console.log("LOGGED IN");
+    return {
+      loggedIn: true,
+    };
   }),
 });
 
