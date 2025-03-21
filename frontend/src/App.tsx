@@ -17,11 +17,23 @@ const App = () => {
       links: [
         httpBatchLink({
           url: API_URL,
-          fetch(url, options) {
-            return fetch(url, {
-              ...options,
-              credentials: "include",
-            });
+          async fetch(url, options) {
+            try {
+              const response = await fetch(url, {
+                ...options,
+                credentials: "include",
+              });
+
+              if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP Error ${response.status}: ${errorText}`);
+              }
+
+              return response;
+            } catch (error) {
+              console.error("Fetch error in tRPC client:", error);
+              throw error;
+            }
           },
         }),
       ],

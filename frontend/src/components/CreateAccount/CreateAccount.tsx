@@ -4,6 +4,7 @@ import { trpc } from "../../utils/trpc";
 import { errorMap } from "../../constants/errorMap";
 import { FC } from "react";
 import { toast } from "react-toastify";
+import styles from "./CreateAccount.module.scss";
 
 interface ICreateAccountFields {
   name: string;
@@ -44,32 +45,34 @@ const CreateAccount: FC<ICreateAccount> = ({ handleSuccess }) => {
 
   return (
     <>
-      <div>Create an Account</div>
+      <div className={styles.body}>
+        <div>Create an Account</div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Enter Your Name</label>
-        <input
-          {...register("name", {
-            required: true,
-          })}
-        />
-        <label>Enter Your Email</label>
-        <input
-          {...register("email", {
-            required: true,
-            pattern: RegExp(regexs.EMAIL_REGEX),
-          })}
-        />
-        <label>Enter your Password</label>
-        <input
-          {...register("password", {
-            required: true,
-          })}
-          type="password"
-        />
-        {!!errors.root && <div>{errors.root.message}</div>}
-        <input type="submit" />
-      </form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <label>Enter Your Name</label>
+          <input
+            {...register("name", {
+              required: true,
+            })}
+          />
+          <label>Enter Your Email</label>
+          <input
+            {...register("email", {
+              required: true,
+              pattern: RegExp(regexs.EMAIL_REGEX),
+            })}
+          />
+          <label>Enter your Password</label>
+          <input
+            {...register("password", {
+              required: true,
+            })}
+            type="password"
+          />
+          {!!errors.root && <div>{errors.root.message}</div>}
+          <input type="submit" />
+        </form>
+      </div>
     </>
   );
 };

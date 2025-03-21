@@ -1,5 +1,5 @@
-$base-font-size: 16px;
+@use "./vars.scss" as vars;
 
 @function px-to-rem($px) {
-  @return #{$px / $base-font-size}rem;
+  @return #{$px / vars.$font-size}rem;
 }

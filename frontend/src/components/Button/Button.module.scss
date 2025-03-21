@@ -1,0 +1,38 @@
+@use "../../styles/utils.scss" as utils;
+@use "../../styles/vars.scss" as vars;
+
+.button {
+  all: unset;
+  position: relative;
+  background-color: vars.$hockey-blue;
+  color: white;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.3s, border-color 0.3s;
+  padding: utils.px-to-rem(12px);
+
+  &:hover {
+    border-color: vars.$hockey-blue;
+    cursor: pointer;
+
+    &::before {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.4s ease;
+  }
+}

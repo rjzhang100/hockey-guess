@@ -1,44 +1,30 @@
-import { Game, NHLApiResponse } from "../../types/nhlTypes";
+import { useMemo } from "react";
+import { NHLApiResponse } from "../../types/nhlTypes";
 import { trpc } from "../../utils/trpc";
-import { hashGameData } from "../../utils/utils";
+import GameGrid from "../GameGrid/GameGrid";
 
 const TodayGames = () => {
-  const { data: rawData, isLoading } = trpc.nhl.getTodaysGames.useQuery();
-  const data = rawData as NHLApiResponse;
+  const today = useMemo(() => new Date(), []);
+  const { data: rawData, isLoading } = trpc.nhl.getGames.useQuery({
+    date: today,
+  });
+
+  if (isLoading) {
+    return <>Loading...</>;
+  }
+
+  const todayGameData = (rawData as NHLApiResponse).at(0);
+
+  if (!todayGameData) {
+    return <>No games are on today.</>;
+  }
 
   return (
     <>
-      {!isLoading ? (
-        <>
-          <div>
-            <div>Today is {data.date.pretty}</div>
-          </div>
-          <div>
-            <div>Today's hockey games:</div>
-            {data.games.map((game: Game, index) => (
-              <div
-                key={hashGameData({
-                  home: game.teams.home,
-                  away: game.teams.away,
-                  date: data.date.raw,
-                })}
-              >
-                <div>Game {index + 1}:</div>
-                <div>
-                  {game.teams.away.locationName} {game.teams.away.teamName}
-                </div>
-                <div>VS</div>
-                <div>
-                  {game.teams.home.locationName} {game.teams.home.teamName}
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      ) : (
-        <>Loading...</>
-      )}
+      <div>Today's Games</div>
+      <GameGrid gameData={todayGameData} />
     </>
   );
 };
+
 export default TodayGames;

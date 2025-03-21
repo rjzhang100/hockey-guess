@@ -2,8 +2,6 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import { CONSTS } from "../consts/consts";
 import { JWT_SECRET } from "../consts/env";
-import { Request } from "express";
-import { IncomingMessage, ServerResponse } from "http";
 import jwt from "jsonwebtoken";
 
 export function createContext({ req, res }: CreateExpressContextOptions) {
@@ -14,7 +12,9 @@ export type Context = Awaited<ReturnType<typeof createContext>> & {
   decodedToken?: any;
 };
 
-const t = initTRPC.context<Context>().create();
+export const verifyUser = async () => {};
+
+const t = initTRPC.context<Context>().create({});
 export const router = t.router;
 export const publicProcedure = t.procedure;
 

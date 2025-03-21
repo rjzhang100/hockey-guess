@@ -1,0 +1,21 @@
+@use "../../styles/vars.scss" as vars;
+@use "../../styles/utils.scss" as utils;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginForm {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.formInput {
+  padding: utils.px-to-rem(8px);
+}

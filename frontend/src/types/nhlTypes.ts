@@ -164,7 +164,9 @@ export type GameHashData = {
   date: string;
 };
 
-export type NHLApiResponse = {
+export type GameDay = {
   date: DateFields;
   games: Game[];
 };
+
+export type NHLApiResponse = GameDay[];

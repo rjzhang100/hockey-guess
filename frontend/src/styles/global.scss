@@ -1,0 +1,15 @@
+@use "./vars.scss" as vars;
+
+@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,586;1,586&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 3rem;
+  background-color: vars.$hockey-white;
+}

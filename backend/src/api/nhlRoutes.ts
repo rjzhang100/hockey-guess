@@ -19,15 +19,16 @@ const nhlRouter = router({
       });
     }
   }),
-  getFutureGames: publicProcedure
+  getGames: publicProcedure
     .input(
       z.object({
-        date: z.date(),
+        date: z.coerce.date(),
       })
     )
     .query(async (opts) => {
       try {
         const { date } = opts.input;
+        console.log(date);
         const formattedDate = date.toISOString().split("T")[0];
         const response = await axios.get(
           `${NHL_API}?startDate=${formattedDate}&endDate=${formattedDate}`

@@ -1,13 +1,15 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { regexs } from "../../constants/regex";
-import { useContext, useState } from "react";
-import Modal from "../../components/Modal/Modal";
+import { useState } from "react";
 import CreateAccount from "../../components/CreateAccount/CreateAccount";
 import { trpc } from "../../utils/trpc";
 import { toast } from "react-toastify";
 import { errorMap } from "../../constants/errorMap";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../constants/routes";
+import styles from "./Login.module.scss";
+import Button from "../../components/Button/Button";
+import Modal from "@mui/material/Modal";
 
 interface ILoginFormFields {
   email: string;
@@ -42,43 +44,52 @@ const Login = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Email</label>
-        <input
-          {...register("email", {
-            required: true,
-            pattern: RegExp(regexs.EMAIL_REGEX),
-          })}
-        />
-        {errors.email?.type == "required" && <div>Must enter an email</div>}
-        {errors.email?.type == "pattern" && <div>Invalid email format</div>}
+      <div className={styles.container}>
+        <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
+          <div className={styles.formField}>
+            <input
+              className={styles.formInput}
+              placeholder="Enter your email"
+              {...register("email", {
+                required: true,
+                pattern: RegExp(regexs.EMAIL_REGEX),
+              })}
+            />
+            {errors.email?.type == "required" && <div>Must enter an email</div>}
+            {errors.email?.type == "pattern" && <div>Invalid email format</div>}
+          </div>
+          <div className={styles.formField}>
+            <input
+              className={styles.formInput}
+              placeholder="Enter your password"
+              type="password"
+              {...register("password", {
+                required: true,
+              })}
+            />
+            {errors.password?.type == "required" && (
+              <div>Must enter a password</div>
+            )}
+          </div>
 
-        <label>Password</label>
-        <input
-          type="password"
-          {...register("password", {
-            required: true,
-          })}
-        />
-        {errors.password?.type == "required" && (
-          <div>Must enter a password</div>
-        )}
-        <input type="submit" />
-      </form>
-      <div>
-        <button
-          onClick={() => {
-            setShowModal(true);
-          }}
-        >
-          Create Account
-        </button>
+          <Button type="submit">Login</Button>
+        </form>
+        <div>
+          <Button
+            onClick={() => {
+              setShowModal(true);
+            }}
+          >
+            Create Account
+          </Button>
+        </div>
       </div>
       <Modal
-        showModal={showModal}
-        closeModal={() => {
-          setShowModal(false);
-        }}
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+        disableEscapeKeyDown={false}
       >
         <CreateAccount handleSuccess={() => setShowModal(false)} />
       </Modal>

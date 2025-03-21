@@ -1,0 +1,67 @@
+@use "./vars.scss" as var;
+
+$font: "Jost", "serif";
+
+@mixin title {
+  font-family: $font;
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 1;
+}
+
+@mixin subtitle {
+  font-family: $font;
+  font-weight: 300;
+  font-size: 32px;
+  line-height: 1;
+}
+
+@mixin navbar {
+  font-family: $font;
+  font-weight: 500;
+  font-size: var.$font-size;
+}
+
+@mixin header {
+  font-family: $font;
+  font-weight: 500;
+  font-size: 32px;
+}
+
+@mixin body {
+  font-family: $font;
+  font-weight: 300;
+  font-size: var.$font-size;
+}
+
+@mixin small-text {
+  font-family: $font;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+@mixin work-name {
+  font-family: $font;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 250;
+}
+
+@mixin skill-block {
+  font-family: $font;
+  font-size: 16px;
+  font-weight: 550;
+}
+
+@mixin caption {
+  font-family: $font;
+  font-size: 16px;
+  font-weight: 250;
+  font-style: italic;
+}
+
+@mixin work-title {
+  font-family: $font;
+  font-size: 32px;
+  font-weight: 600;
+}
