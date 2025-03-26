@@ -12,7 +12,8 @@ import cookieParser from "cookie-parser";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import voteRouter from "./api/voteRoutes";
 import fs from "fs";
-
+import path from "path";
+import os from "os";
 dotenv.config();
 
 const app = express();
@@ -37,18 +38,21 @@ export type AppRouter = typeof appRouter;
 
 const connectMongoDB = async () => {
   try {
-    const certPath = "./temp/cert.pem";
     if (!CERT) {
       throw new Error("Failed to find Mongo cert");
     }
-    fs.writeFileSync(certPath, Buffer.from(CERT, "base64"));
 
+    const certBuffer = Buffer.from(CERT, "base64");
+
+    const tempCertPath = path.join(os.tmpdir(), "cert.pem");
+
+    fs.writeFileSync(tempCertPath, certBuffer);
     await mongoose.connect(MONGODB_URI, {
-      tlsCertificateKeyFile: certPath,
+      tlsCertificateKeyFile: tempCertPath,
       serverApi: ServerApiVersion.v1,
     });
     console.log("Connected to mongodb");
-    fs.unlinkSync(certPath);
+    fs.unlinkSync(tempCertPath);
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
   }

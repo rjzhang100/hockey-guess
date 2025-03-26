@@ -37,6 +37,7 @@
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.9",
     "axios": "^1.8.4",
+    "os": "^0.1.2",
     "typescript": "^5.8.2"
   }
 }
