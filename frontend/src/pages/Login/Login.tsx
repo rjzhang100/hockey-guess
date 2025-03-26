@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { API_URL } from "../../constants/env";
 
 interface ILoginFormFields {
   email: string;
