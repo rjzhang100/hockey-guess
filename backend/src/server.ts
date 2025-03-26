@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { ServerApiVersion } from "mongodb";
-import { MONGODB_URI, PATH_TO_MONGODB_CERT, PORT } from "./consts/env";
+import { CERT, FRONTEND_ORIGIN, MONGODB_URI, PORT } from "./consts/env";
 import mongoose from "mongoose";
 import { createContext, router } from "./trpc/trpc";
 import userRouter from "./api/userRoutes";
@@ -11,6 +11,7 @@ import authRouter from "./api/authRoutes";
 import cookieParser from "cookie-parser";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import voteRouter from "./api/voteRoutes";
+import fs from "fs";
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: FRONTEND_ORIGIN,
     credentials: true,
   })
 );
@@ -36,11 +37,18 @@ export type AppRouter = typeof appRouter;
 
 const connectMongoDB = async () => {
   try {
+    const certPath = "./temp/cert.pem";
+    if (!CERT) {
+      throw new Error("Failed to find Mongo cert");
+    }
+    fs.writeFileSync(certPath, Buffer.from(CERT, "base64"));
+
     await mongoose.connect(MONGODB_URI, {
-      tlsCertificateKeyFile: PATH_TO_MONGODB_CERT,
+      tlsCertificateKeyFile: certPath,
       serverApi: ServerApiVersion.v1,
     });
     console.log("Connected to mongodb");
+    fs.unlinkSync(certPath);
   } catch (err) {
     console.error("Failed to connect to MongoDB:", err);
   }
