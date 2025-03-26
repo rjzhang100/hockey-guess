@@ -26,7 +26,12 @@ const Login = () => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<ILoginFormFields>();
+  } = useForm<ILoginFormFields>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
   const navigate = useNavigate();
 
   const signInMutation = trpc.auth.loginUser.useMutation({

@@ -26,7 +26,13 @@ const CreateAccount = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<ICreateAccountFields>();
+  } = useForm<ICreateAccountFields>({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
   const navigate = useNavigate();
 
   const insertUserMutation = trpc.user.insertUser.useMutation({
