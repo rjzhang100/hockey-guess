@@ -6,23 +6,8 @@ export const hashGameData = (gameData: GameHashData) => {
   return SHA256(formattedData).toString();
 };
 
-export const dateTransformer = {
-  input: (data: any): any => {
-    if (data?.date && typeof data.date === "string") {
-      return {
-        ...data,
-        date: new Date(data.date),
-      };
-    }
-    return data;
-  },
-  output: (data: any): any => {
-    if (data?.date && data.date instanceof Date) {
-      return {
-        ...data,
-        date: data.date.toISOString(),
-      };
-    }
-    return data;
-  },
-};
+export const hyphenateAndLowercase = (inputString: string) =>
+  inputString
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]/g, "");

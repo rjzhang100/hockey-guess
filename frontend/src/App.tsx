@@ -9,6 +9,11 @@ import { trpc } from "./utils/trpc";
 import { API_URL } from "./constants/env";
 import RequireAuth from "./pages/RequireAuth/RequireAuth";
 import { Bounce, ToastContainer } from "react-toastify";
+import CreateAccount from "./pages/CreateAccount/CreateAccount";
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -43,6 +48,10 @@ const App = () => {
     {
       path: routes.LOGIN,
       element: <Login />,
+    },
+    {
+      path: routes.CREATE_ACCOUNT,
+      element: <CreateAccount />,
     },
     {
       path: routes.ROOT,

@@ -4,7 +4,6 @@ const Home = () => {
   return (
     <>
       <div>
-        <div>Welcome to the Bobo Hockey Guessing Page</div>
         <TodayGames />
       </div>
     </>

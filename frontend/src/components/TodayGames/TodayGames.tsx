@@ -2,18 +2,24 @@ import { useMemo } from "react";
 import { NHLApiResponse } from "../../types/nhlTypes";
 import { trpc } from "../../utils/trpc";
 import GameGrid from "../GameGrid/GameGrid";
+import { CircularProgress } from "@mui/material";
+import { toZonedTime } from "date-fns-tz";
 
 const TodayGames = () => {
-  const today = useMemo(() => new Date(), []);
-  const { data: rawData, isLoading } = trpc.nhl.getGames.useQuery({
-    date: today,
-  });
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const today = useMemo(() => toZonedTime(new Date(), timeZone), []);
 
-  if (isLoading) {
-    return <>Loading...</>;
+  const { data: gameData, isLoading: isLoadingGames } =
+    trpc.nhl.getGames.useQuery({
+      date: new Date(today),
+      tz: timeZone,
+    });
+
+  if (isLoadingGames) {
+    return <CircularProgress />;
   }
 
-  const todayGameData = (rawData as NHLApiResponse).at(0);
+  const todayGameData = (gameData as NHLApiResponse).at(0);
 
   if (!todayGameData) {
     return <>No games are on today.</>;

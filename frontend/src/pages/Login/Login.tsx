@@ -1,15 +1,20 @@
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { regexs } from "../../constants/regex";
-import { useState } from "react";
-import CreateAccount from "../../components/CreateAccount/CreateAccount";
 import { trpc } from "../../utils/trpc";
 import { toast } from "react-toastify";
 import { errorMap } from "../../constants/errorMap";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../constants/routes";
-import styles from "./Login.module.scss";
-import Button from "../../components/Button/Button";
-import Modal from "@mui/material/Modal";
+
+import {
+  Box,
+  Button,
+  Container,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 interface ILoginFormFields {
   email: string;
@@ -18,8 +23,8 @@ interface ILoginFormFields {
 
 const Login = () => {
   const {
-    register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<ILoginFormFields>();
   const navigate = useNavigate();
@@ -40,60 +45,69 @@ const Login = () => {
     signInMutation.mutate(data);
   };
 
-  const [showModal, setShowModal] = useState<boolean>(false);
-
   return (
-    <>
-      <div className={styles.container}>
-        <form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
-          <div className={styles.formField}>
-            <input
-              className={styles.formInput}
-              placeholder="Enter your email"
-              {...register("email", {
-                required: true,
-                pattern: RegExp(regexs.EMAIL_REGEX),
-              })}
-            />
-            {errors.email?.type == "required" && <div>Must enter an email</div>}
-            {errors.email?.type == "pattern" && <div>Invalid email format</div>}
-          </div>
-          <div className={styles.formField}>
-            <input
-              className={styles.formInput}
-              placeholder="Enter your password"
-              type="password"
-              {...register("password", {
-                required: true,
-              })}
-            />
-            {errors.password?.type == "required" && (
-              <div>Must enter a password</div>
-            )}
-          </div>
-
-          <Button type="submit">Login</Button>
-        </form>
-        <div>
-          <Button
-            onClick={() => {
-              setShowModal(true);
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Box>
+        <Typography align="center" component="h1">
+          Login
+        </Typography>
+        <Stack
+          rowGap="1rem"
+          margin="1rem"
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Controller
+            name="email"
+            control={control}
+            rules={{
+              required: "Email is required",
+              pattern: {
+                value: RegExp(regexs.EMAIL_REGEX),
+                message: "Please enter a valid email",
+              },
             }}
-          >
-            Create Account
+            render={({ field }) => (
+              <TextField
+                {...field}
+                size="small"
+                label="Enter your email"
+                variant="outlined"
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            )}
+          />
+          <Controller
+            name="password"
+            control={control}
+            rules={{
+              required: "Password is required",
+            }}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                size="small"
+                label="Enter your password"
+                type="password"
+                variant="outlined"
+                error={!!errors.password}
+                helperText={errors.password?.message}
+              />
+            )}
+          />
+          <Button type="submit" variant="outlined">
+            Sign In
           </Button>
-        </div>
-      </div>
-      <Modal
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-        disableEscapeKeyDown={false}
-      >
-        <CreateAccount handleSuccess={() => setShowModal(false)} />
-      </Modal>
-    </>
+          <Link href={routes.CREATE_ACCOUNT}>Create an Account</Link>
+        </Stack>
+      </Box>
+    </Container>
   );
 };
 

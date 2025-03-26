@@ -1,6 +1,8 @@
 import { FC } from "react";
 import { Game, GameDay } from "../../types/nhlTypes";
 import { hashGameData } from "../../utils/utils";
+import GameCard from "../GameCard/GameCard";
+import { Grid2 } from "@mui/material";
 
 interface IGameGridProps {
   gameData: GameDay;
@@ -13,27 +15,25 @@ const GameGrid: FC<IGameGridProps> = ({ gameData: data }) => {
         <div>
           <div>Today is {data.date.pretty}</div>
         </div>
-        <div>
-          <div>Today's hockey games:</div>
-          {data.games.map((game: Game, index) => (
-            <div
-              key={hashGameData({
-                home: game.teams.home,
-                away: game.teams.away,
-                date: data.date.raw,
-              })}
+        <Grid2 container spacing={3}>
+          {data.games.map((game) => (
+            <Grid2
+              size={{
+                xs: 12,
+                sm: 6,
+              }}
             >
-              <div>Game {index + 1}:</div>
-              <div>
-                {game.teams.away.locationName} {game.teams.away.teamName}
-              </div>
-              <div>VS</div>
-              <div>
-                {game.teams.home.locationName} {game.teams.home.teamName}
-              </div>
-            </div>
+              <GameCard
+                gameId={hashGameData({
+                  home: game.teams.home,
+                  away: game.teams.away,
+                  date: data.date.raw,
+                })}
+                gameInfo={game}
+              />
+            </Grid2>
           ))}
-        </div>
+        </Grid2>
       </>
     </>
   );
