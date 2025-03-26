@@ -19,6 +19,7 @@ const nhlRouter = router({
     )
     .query(async (opts) => {
       try {
+        console.log(opts.ctx);
         const { date, tz } = opts.input;
         const zonedDate = toZonedTime(date, tz);
         const formattedDate = format(zonedDate, "yyyy-MM-dd");

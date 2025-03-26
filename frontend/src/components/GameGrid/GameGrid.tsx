@@ -18,6 +18,11 @@ const GameGrid: FC<IGameGridProps> = ({ gameData: data }) => {
         <Grid2 container spacing={3}>
           {data.games.map((game) => (
             <Grid2
+              key={hashGameData({
+                home: game.teams.home,
+                away: game.teams.away,
+                date: data.date.raw,
+              })}
               size={{
                 xs: 12,
                 sm: 6,

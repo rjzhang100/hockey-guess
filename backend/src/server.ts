@@ -10,6 +10,7 @@ import nhlRouter from "./api/nhlRoutes";
 import authRouter from "./api/authRoutes";
 import cookieParser from "cookie-parser";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
+import voteRouter from "./api/voteRoutes";
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ const appRouter = router({
   db: dbUserRouter,
   nhl: nhlRouter,
   auth: authRouter,
+  vote: voteRouter,
 });
 
 export type AppRouter = typeof appRouter;

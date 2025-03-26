@@ -95,7 +95,11 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
               transition={{ duration: 0.05 }} // Smooth transition for opacity and scale
               style={{ padding: 16 }}
             >
-              <GameCardDialog gameId={gameId} gameInfo={gameInfo} />
+              <GameCardDialog
+                gameId={gameId}
+                gameInfo={gameInfo}
+                closeDialog={() => setOpen(false)}
+              />
             </motion.div>
           </Dialog>
         )}

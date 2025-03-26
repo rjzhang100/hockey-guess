@@ -20,7 +20,7 @@ const TeamLogo: FC<ITeamLogoProps> = ({ teamAbbrv, logoTheme }) => {
   return (
     <img
       style={{
-        width: "188px",
+        width: "150px",
       }}
       src={`data:image/svg+xml;utf8,${encodeURIComponent(data)}`}
     />
