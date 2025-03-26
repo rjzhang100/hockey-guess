@@ -1,35 +1,37 @@
 import {
   Box,
   Button,
-  Container,
   Dialog,
   DialogContent,
-  DialogContentText,
   Grid2,
   Stack,
   Typography,
 } from "@mui/material";
 import GameCardTeamInfo from "../GameCardTeamInfo/GameCardTeamInfo";
 import { Game } from "../../types/nhlTypes";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import { toast } from "react-toastify";
 import { errorMap } from "../../constants/errorMap";
+import { AuthContext } from "../../contexts/AuthContext";
 
 interface IGameCardDialogProps {
   gameId: string;
   gameInfo: Game;
   closeDialog: () => void;
+  votingClosed: boolean;
 }
 
 const GameCardDialog: FC<IGameCardDialogProps> = ({
   gameId,
   gameInfo,
   closeDialog,
+  votingClosed,
 }) => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [selectedTeam, setSelectedTeam] = useState<string>("");
 
+  const { user } = useContext(AuthContext);
   const voteMutation = trpc.vote.castVote.useMutation({
     onError(error) {
       const { data } = error;
@@ -48,7 +50,9 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
   const handleSubmitVote = () => {
     console.log("Voted for ", selectedTeam);
     voteMutation.mutate({
-      gameHash: gameId,
+      userId: user.id,
+      userName: user.name,
+      gameId: gameId,
       votedFor: selectedTeam,
     });
   };
@@ -60,7 +64,9 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="h5">Pick Your Winner!</Typography>
+        {!votingClosed && (
+          <Typography variant="h5">Pick Your Winner!</Typography>
+        )}
         <Grid2
           container
           gap={2}
@@ -79,15 +85,17 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
                 side="Home"
                 theme="light"
               />
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setSelectedTeam(gameInfo.teams.home.locationName);
-                  setShowConfirm(true);
-                }}
-              >
-                Vote for {gameInfo.teams.home.locationName}
-              </Button>
+              {!votingClosed && (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setSelectedTeam(gameInfo.teams.home.locationName);
+                    setShowConfirm(true);
+                  }}
+                >
+                  Vote for {gameInfo.teams.home.locationName}
+                </Button>
+              )}
             </Stack>
           </Grid2>
           <Grid2 size={5}>
@@ -99,15 +107,17 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
                 side="Away"
                 theme="light"
               />
-              <Button
-                variant="contained"
-                onClick={() => {
-                  setSelectedTeam(gameInfo.teams.away.locationName);
-                  setShowConfirm(true);
-                }}
-              >
-                Vote for {gameInfo.teams.away.locationName}
-              </Button>
+              {!votingClosed && (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setSelectedTeam(gameInfo.teams.away.locationName);
+                    setShowConfirm(true);
+                  }}
+                >
+                  Vote for {gameInfo.teams.away.locationName}
+                </Button>
+              )}
             </Stack>
           </Grid2>
         </Grid2>

@@ -1,6 +1,13 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Game } from "../../types/nhlTypes";
-import { Container, Dialog, Grid2, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Dialog,
+  Grid2,
+  Typography,
+} from "@mui/material";
 import {
   getTeamPrimaryColour,
   getTeamSecondaryColour,
@@ -8,6 +15,10 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import GameCardDialog from "../GameCardDialog/GameCardDialog";
 import GameCardTeamInfo from "../GameCardTeamInfo/GameCardTeamInfo";
+import { trpc } from "../../utils/trpc";
+import StatusPill from "../StatusPill/StatusPill";
+import { getWinner } from "../../utils/utils";
+import { teamAbbrvToLocation } from "../../constants/consts";
 
 interface IGameCardProps {
   gameId: string;
@@ -24,6 +35,51 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
     gameInfo.teams.away.teamName
   );
   const [open, setOpen] = useState<boolean>(false);
+  const { data, isLoading } = trpc.vote.getVoteByGameByUser.useQuery({
+    gameId: gameId,
+  });
+  const tallyMutation = trpc.vote.tallyVotesForGame.useMutation();
+
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
+    console.log("call use effect");
+
+    if (gameInfo.status.state === "FINAL") {
+      tallyMutation.mutate({
+        gameId: gameId,
+        gameWinner: teamAbbrvToLocation[getWinner(gameInfo)],
+      });
+    }
+  }, []);
+
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+  const vote = data as any | undefined;
+
+  console.log(vote);
+
+  const voteCorrect = !!vote
+    ? vote.votedFor == teamAbbrvToLocation[getWinner(gameInfo)]
+    : null;
+
+  const getStatusText = () => {
+    switch (gameInfo.status.state) {
+      case "FINAL":
+        return `Winner: ${getWinner(gameInfo)}`;
+      case "LIVE":
+        return `P${gameInfo.progress?.currentPeriod}: ${gameInfo.progress?.currentPeriodTimeRemaining} left`;
+      case "PREVIEW":
+        return !!vote ? `Voted for ${vote.votedFor}` : `Vote now!`;
+      case "POSTPONED":
+        return "";
+    }
+  };
+
   return (
     <>
       <motion.div
@@ -39,6 +95,7 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
           disableGutters
           sx={{
             display: "flex",
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
             border: "2px solid grey",
@@ -83,6 +140,25 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
               />
             </Grid2>
           </Grid2>
+          <Box
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
+            width="100%"
+            paddingY="1rem"
+            bgcolor={
+              !vote || gameInfo.status.state != "FINAL"
+                ? "#eeeeee"
+                : voteCorrect
+                ? "rgb(75, 181, 67, 0.5)"
+                : "rgb(255, 148, 148, 0.5)"
+            }
+          >
+            <StatusPill gameStatus={gameInfo.status} />
+            <Box>
+              <Typography variant="body1">{getStatusText()}</Typography>
+            </Box>
+          </Box>
         </Container>
       </motion.div>
       <AnimatePresence>
@@ -99,6 +175,7 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
                 gameId={gameId}
                 gameInfo={gameInfo}
                 closeDialog={() => setOpen(false)}
+                votingClosed={!!vote || gameInfo.status.state != "PREVIEW"}
               />
             </motion.div>
           </Dialog>

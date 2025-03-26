@@ -29,7 +29,7 @@ const CreateAccount = () => {
   } = useForm<ICreateAccountFields>();
   const navigate = useNavigate();
 
-  const insertUserMutation = trpc.db.insertUser.useMutation({
+  const insertUserMutation = trpc.user.insertUser.useMutation({
     onError(error) {
       const { data } = error;
 

@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { JWT_SECRET } from "../consts/env";
 import User from "../models/User";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import {
   Context,
   protectedProcedure,
@@ -45,7 +45,7 @@ const loginUser = async (userData: any, ctx: Context) => {
       sameSite: "strict",
       maxAge: 60 * 60 * 1000,
     });
-    return true;
+    return user;
   } catch (err) {
     throw new TRPCError({
       code: "UNAUTHORIZED",
@@ -70,6 +70,28 @@ const authRouter = router({
     return {
       loggedIn: true,
     };
+  }),
+  getSignedInUser: protectedProcedure.query(async (opts) => {
+    const userId = (opts.ctx.decodedToken as JwtPayload).userId;
+    try {
+      const thisUser = await User.findById(userId);
+      if (!thisUser) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong with auth... text Ray",
+        });
+      }
+      return {
+        id: thisUser.id,
+        name: thisUser.name,
+        email: thisUser.email,
+      };
+    } catch (err) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong with auth... text Ray",
+      });
+    }
   }),
 });
 

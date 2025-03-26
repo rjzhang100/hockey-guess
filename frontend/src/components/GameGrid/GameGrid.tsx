@@ -9,38 +9,32 @@ interface IGameGridProps {
 }
 
 const GameGrid: FC<IGameGridProps> = ({ gameData: data }) => {
+  console.log(data);
   return (
-    <>
-      <>
-        <div>
-          <div>Today is {data.date.pretty}</div>
-        </div>
-        <Grid2 container spacing={3}>
-          {data.games.map((game) => (
-            <Grid2
-              key={hashGameData({
-                home: game.teams.home,
-                away: game.teams.away,
-                date: data.date.raw,
-              })}
-              size={{
-                xs: 12,
-                sm: 6,
-              }}
-            >
-              <GameCard
-                gameId={hashGameData({
-                  home: game.teams.home,
-                  away: game.teams.away,
-                  date: data.date.raw,
-                })}
-                gameInfo={game}
-              />
-            </Grid2>
-          ))}
+    <Grid2 container spacing={3}>
+      {data.games.map((game) => (
+        <Grid2
+          key={hashGameData({
+            home: game.teams.home,
+            away: game.teams.away,
+            date: data.date.raw,
+          })}
+          size={{
+            xs: 12,
+            sm: 6,
+          }}
+        >
+          <GameCard
+            gameId={hashGameData({
+              home: game.teams.home,
+              away: game.teams.away,
+              date: data.date.raw,
+            })}
+            gameInfo={game}
+          />
         </Grid2>
-      </>
-    </>
+      ))}
+    </Grid2>
   );
 };
 export default GameGrid;

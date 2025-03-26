@@ -14,6 +14,7 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -72,18 +73,20 @@ const App = () => {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        <ToastContainer
-          position="bottom-left"
-          autoClose={1200}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          theme="dark"
-          transition={Bounce}
-        />
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <ToastContainer
+            position="bottom-left"
+            autoClose={1200}
+            hideProgressBar={true}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss
+            theme="dark"
+            transition={Bounce}
+          />
+        </AuthProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );

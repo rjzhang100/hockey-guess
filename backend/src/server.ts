@@ -5,7 +5,7 @@ import { ServerApiVersion } from "mongodb";
 import { MONGODB_URI, PATH_TO_MONGODB_CERT, PORT } from "./consts/env";
 import mongoose from "mongoose";
 import { createContext, router } from "./trpc/trpc";
-import dbUserRouter from "./api/dbUserRoutes";
+import userRouter from "./api/userRoutes";
 import nhlRouter from "./api/nhlRoutes";
 import authRouter from "./api/authRoutes";
 import cookieParser from "cookie-parser";
@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 const appRouter = router({
-  db: dbUserRouter,
+  user: userRouter,
   nhl: nhlRouter,
   auth: authRouter,
   vote: voteRouter,

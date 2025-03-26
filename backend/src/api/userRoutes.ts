@@ -1,7 +1,8 @@
 import User from "../models/User";
 import { z } from "zod";
-import { publicProcedure, router } from "../trpc/trpc";
+import { protectedProcedure, publicProcedure, router } from "../trpc/trpc";
 import { TRPCError } from "@trpc/server";
+import { ObjectIdRegex } from "../consts/consts";
 
 const insertUser = async (userData: any) => {
   try {
@@ -20,27 +21,27 @@ const insertUser = async (userData: any) => {
   }
 };
 
-const getUser = async (userEmail: any) => {
+const getUser = async (userId: any) => {
   try {
     const user = await User.findOne({
-      email: userEmail,
+      _id: userId,
     });
     if (!user) {
       throw new TRPCError({
         code: "NOT_FOUND",
-        message: `Failed to find user by email`,
+        message: `Failed to find user`,
       });
     }
     return user;
   } catch (err) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
-      message: `Failed to find user by email: ${(err as Error).message}`,
+      message: `Failed to find user: ${(err as Error).message}`,
     });
   }
 };
 
-const dbUserRouter = router({
+const userRouter = router({
   insertUser: publicProcedure
     .input(
       z.object({
@@ -56,16 +57,16 @@ const dbUserRouter = router({
         throw err;
       }
     }),
-  getUser: publicProcedure
+  getUser: protectedProcedure
     .input(
       z.object({
-        email: z.string(),
+        userId: z.string().regex(ObjectIdRegex),
       })
     )
     .mutation(async (opts) => {
-      const { email } = opts.input;
-      return await getUser(email);
+      const { userId } = opts.input;
+      return await getUser(userId);
     }),
 });
 
-export default dbUserRouter;
+export default userRouter;

@@ -1,25 +1,34 @@
 import mongoose, { Schema, Types } from "mongoose";
 
 const VoteSchema = new Schema({
-  gameHash: {
+  gameId: {
     type: String,
     required: true,
-    unique: true,
   },
   userId: {
     type: Types.ObjectId,
+    required: true,
+  },
+  userName: {
+    type: String,
     required: true,
   },
   votedFor: {
     type: String,
     required: true,
   },
+  voteCounted: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 export interface IVote {
-  gameHash: string;
+  gameId: string;
   userId: Types.ObjectId;
+  userName: string;
   votedFor: string;
+  voteCounted: boolean;
 }
 
 const Vote = mongoose.model<IVote>("Vote", VoteSchema);

@@ -126,6 +126,10 @@ const nhlTeamColors: Record<string, string> = {
   // Winnipeg Jets
   "jets-primary": "#041E42",
   "jets-secondary": "#004C97",
+
+  // Utah Hockey Club
+  "hockey-club-primary": "#71AFE5",
+  "hockey-club-secondary": "#71AFE5",
 };
 
 export const getTeamPrimaryColour = (teamName: string) =>

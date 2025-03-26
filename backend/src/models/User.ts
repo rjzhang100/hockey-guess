@@ -15,6 +15,21 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    gamesRight: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    gamesWrong: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    percentRight: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
   },
   {
     timestamps: true,
@@ -48,6 +63,9 @@ export interface IUser {
   createdAt?: Date;
   updatedAt?: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
+  gamesRight: number;
+  gamesWrong: number;
+  percentRight: number;
 }
 
 const User = mongoose.model<IUser>("User", UserSchema);
