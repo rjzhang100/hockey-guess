@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { FC } from "react";
 import { trpc } from "../../utils/trpc";
 

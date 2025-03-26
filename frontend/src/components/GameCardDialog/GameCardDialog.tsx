@@ -3,14 +3,8 @@ import {
   Button,
   Dialog,
   DialogContent,
-  Divider,
   Grid2,
   Stack,
-  Table,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Typography,
 } from "@mui/material";
 import GameCardTeamInfo from "../GameCardTeamInfo/GameCardTeamInfo";

@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Game, GameDay } from "../../types/nhlTypes";
+import { GameDay } from "../../types/nhlTypes";
 import { hashGameData } from "../../utils/utils";
 import GameCard from "../GameCard/GameCard";
 import { Grid2 } from "@mui/material";

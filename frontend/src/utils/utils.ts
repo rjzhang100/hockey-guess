@@ -1,4 +1,4 @@
-import { Game, GameHashData } from "../types/nhlTypes";
+import { GameHashData } from "../types/nhlTypes";
 import SHA256 from "crypto-js/sha256";
 
 export const hashGameData = (gameData: GameHashData) => {

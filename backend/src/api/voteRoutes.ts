@@ -1,5 +1,5 @@
 import Vote from "../models/Vote";
-import { Context, protectedProcedure, router } from "../trpc/trpc";
+import { protectedProcedure, router } from "../trpc/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { JwtPayload } from "jsonwebtoken";

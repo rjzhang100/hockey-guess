@@ -66,7 +66,7 @@ const userRouter = router({
       const { userId } = opts.input;
       return await getUser(userId);
     }),
-  getAllUsers: protectedProcedure.query(async (opts) => {
+  getAllUsers: protectedProcedure.query(async () => {
     try {
       const users = await User.find();
       const safeUsers = users.map((user) => ({

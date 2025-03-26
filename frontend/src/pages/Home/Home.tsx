@@ -28,13 +28,16 @@ function CustomTabPanel(props: TabPanelProps) {
 
 const Home = () => {
   const [tabValue, setTabValue] = useState<number>(2);
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (newValue: number) => {
     setTabValue(newValue);
   };
   return (
     <>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={tabValue} onChange={handleChange}>
+        <Tabs
+          value={tabValue}
+          onChange={(_, newValue) => handleChange(newValue)}
+        >
           <Tab label={DAYS.YESTERDAY} value={1} />
           <Tab label={DAYS.TODAY} value={2} />
           <Tab label={DAYS.TOMORROW} value={3} />
