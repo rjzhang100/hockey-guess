@@ -41,8 +41,8 @@ const loginUser = async (userData: any, ctx: Context) => {
     );
     ctx.res.cookie(CONSTS.TOKEN_COOKIE_KEY, token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 60 * 60 * 1000,
     });
     return user;
