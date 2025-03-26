@@ -1,6 +1,5 @@
 export interface Game {
   status: GameStatus;
-  progress?: GameProgress;
   startTime: string;
   goals: Goal[];
   scores: GameScores;
@@ -17,6 +16,7 @@ export interface Game {
 
 export interface GameStatus {
   state: "FINAL" | "LIVE" | "PREVIEW" | "POSTPONED";
+  progress?: GameProgress;
 }
 
 export interface GameProgress {

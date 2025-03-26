@@ -34,7 +34,6 @@ const Login = () => {
     },
   });
   const navigate = useNavigate();
-  console.log(API_URL);
   const signInMutation = trpc.auth.loginUser.useMutation({
     onError(error) {
       const { data } = error;

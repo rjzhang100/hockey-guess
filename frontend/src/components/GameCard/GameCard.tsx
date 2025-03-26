@@ -59,7 +59,6 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
     return <CircularProgress />;
   }
   const vote = data as any | undefined;
-
   const voteCorrect = !!vote
     ? vote.votedFor == teamAbbrvToLocation[getWinner(gameInfo)]
     : undefined;
@@ -69,7 +68,7 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
       case "FINAL":
         return `Winner: ${getWinner(gameInfo)}`;
       case "LIVE":
-        return `P${gameInfo.progress?.currentPeriod}: ${gameInfo.progress?.currentPeriodTimeRemaining} left`;
+        return `P${gameInfo.status.progress?.currentPeriod}: ${gameInfo.status.progress?.currentPeriodTimeRemaining.pretty} left`;
       case "PREVIEW":
         return !!vote ? `Voted for ${vote.votedFor}` : `Vote now!`;
       case "POSTPONED":
