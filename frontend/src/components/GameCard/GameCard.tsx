@@ -19,6 +19,7 @@ import { trpc } from "../../utils/trpc";
 import StatusPill from "../StatusPill/StatusPill";
 import { getWinner } from "../../utils/utils";
 import { teamAbbrvToLocation } from "../../constants/consts";
+import { COLOURS } from "../../constants/styles";
 
 interface IGameCardProps {
   gameId: string;
@@ -46,8 +47,6 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
     if (hasRun.current) return;
     hasRun.current = true;
 
-    console.log("call use effect");
-
     if (gameInfo.status.state === "FINAL") {
       tallyMutation.mutate({
         gameId: gameId,
@@ -61,11 +60,9 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
   }
   const vote = data as any | undefined;
 
-  console.log(vote);
-
   const voteCorrect = !!vote
     ? vote.votedFor == teamAbbrvToLocation[getWinner(gameInfo)]
-    : null;
+    : undefined;
 
   const getStatusText = () => {
     switch (gameInfo.status.state) {
@@ -148,10 +145,10 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
             paddingY="1rem"
             bgcolor={
               !vote || gameInfo.status.state != "FINAL"
-                ? "#eeeeee"
+                ? COLOURS.WHITE
                 : voteCorrect
-                ? "rgb(75, 181, 67, 0.5)"
-                : "rgb(255, 148, 148, 0.5)"
+                ? COLOURS.SUCCESS_GREEN
+                : COLOURS.ERROR_RED
             }
           >
             <StatusPill gameStatus={gameInfo.status} />
@@ -176,6 +173,7 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
                 gameInfo={gameInfo}
                 closeDialog={() => setOpen(false)}
                 votingClosed={!!vote || gameInfo.status.state != "PREVIEW"}
+                voteCorrect={voteCorrect}
               />
             </motion.div>
           </Dialog>

@@ -66,7 +66,6 @@ const authRouter = router({
       return await loginUser(opts.input, opts.ctx);
     }),
   checkLoggedIn: protectedProcedure.query(() => {
-    console.log("LOGGED IN");
     return {
       loggedIn: true,
     };

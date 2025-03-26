@@ -9,7 +9,6 @@ interface IGameGridProps {
 }
 
 const GameGrid: FC<IGameGridProps> = ({ gameData: data }) => {
-  console.log(data);
   return (
     <Grid2 container spacing={3}>
       {data.games.map((game) => (

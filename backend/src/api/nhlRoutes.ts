@@ -50,7 +50,6 @@ const nhlRouter = router({
         const theme = logoTheme ?? "dark";
         const cachedLogo = cache.get(`${teamAbbrv}-${theme}`);
         if (cachedLogo) {
-          console.log("found logo in cache yay");
           return cachedLogo;
         }
         const response = await axios.get(

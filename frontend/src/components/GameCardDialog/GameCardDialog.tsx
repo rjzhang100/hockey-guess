@@ -3,8 +3,14 @@ import {
   Button,
   Dialog,
   DialogContent,
+  Divider,
   Grid2,
   Stack,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
 } from "@mui/material";
 import GameCardTeamInfo from "../GameCardTeamInfo/GameCardTeamInfo";
@@ -14,12 +20,14 @@ import { trpc } from "../../utils/trpc";
 import { toast } from "react-toastify";
 import { errorMap } from "../../constants/errorMap";
 import { AuthContext } from "../../contexts/AuthContext";
+import VoteTable from "../VoteTable/VoteTable";
 
 interface IGameCardDialogProps {
   gameId: string;
   gameInfo: Game;
   closeDialog: () => void;
   votingClosed: boolean;
+  voteCorrect?: boolean;
 }
 
 const GameCardDialog: FC<IGameCardDialogProps> = ({
@@ -27,6 +35,7 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
   gameInfo,
   closeDialog,
   votingClosed,
+  voteCorrect,
 }) => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [selectedTeam, setSelectedTeam] = useState<string>("");
@@ -48,7 +57,6 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
   });
 
   const handleSubmitVote = () => {
-    console.log("Voted for ", selectedTeam);
     voteMutation.mutate({
       userId: user.id,
       userName: user.name,
@@ -121,6 +129,11 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
             </Stack>
           </Grid2>
         </Grid2>
+        <VoteTable
+          gameId={gameId}
+          gameStatus={gameInfo.status}
+          voteCorrect={voteCorrect}
+        />
       </Stack>
       {showConfirm && (
         <Dialog open={showConfirm} onClose={() => setShowConfirm(false)}>

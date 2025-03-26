@@ -21,6 +21,11 @@ const VoteSchema = new Schema({
     type: Boolean,
     required: true,
   },
+  createdAt: {
+    type: String,
+    default: Date.now(),
+    expires: 3 * 24 * 60 * 60,
+  },
 });
 
 export interface IVote {

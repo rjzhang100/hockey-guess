@@ -8,7 +8,6 @@ import User from "../models/User";
 const getVotesByGame = async (gameId: String) => {
   try {
     const votes = await Vote.find({ gameId });
-    console.log(votes);
     return votes;
   } catch (err) {
     throw new TRPCError({
@@ -38,7 +37,6 @@ const voteRouter = router({
           userId: (opts.ctx.decodedToken as JwtPayload).userId,
           voteCounted: false,
         });
-        console.log("WRITING VOTE:", vote);
 
         await vote.save();
         return vote;
@@ -95,7 +93,6 @@ const voteRouter = router({
       try {
         const { gameId, gameWinner } = opts.input;
         const votes = await getVotesByGame(gameId);
-        console.log(votes);
 
         for (const vote of votes) {
           const userId = vote.userId;

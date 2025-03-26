@@ -10,7 +10,6 @@ const insertUser = async (userData: any) => {
       ...userData,
     });
     await user.save();
-    console.log(user);
     return user;
   } catch (err) {
     console.log(err);
@@ -67,6 +66,24 @@ const userRouter = router({
       const { userId } = opts.input;
       return await getUser(userId);
     }),
+  getAllUsers: protectedProcedure.query(async (opts) => {
+    try {
+      const users = await User.find();
+      const safeUsers = users.map((user) => ({
+        name: user.name,
+        email: user.email,
+        gamesRight: user.gamesRight,
+        gamesWrong: user.gamesWrong,
+        percentRight: user.percentRight,
+      }));
+      return safeUsers;
+    } catch (err) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong fetching users",
+      });
+    }
+  }),
 });
 
 export default userRouter;
