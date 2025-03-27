@@ -23,7 +23,6 @@ interface IGameCardDialogProps {
   gameInfo: Game;
   closeDialog: () => void;
   votingClosed: boolean;
-  voteCorrect?: boolean;
 }
 
 const GameCardDialog: FC<IGameCardDialogProps> = ({
@@ -31,7 +30,6 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
   gameInfo,
   closeDialog,
   votingClosed,
-  voteCorrect,
 }) => {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [selectedTeam, setSelectedTeam] = useState<string>("");
@@ -141,11 +139,7 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
             </Stack>
           </Grid2>
         </Grid2>
-        <VoteTable
-          gameId={gameId}
-          gameStatus={gameInfo.status}
-          voteCorrect={voteCorrect}
-        />
+        <VoteTable gameId={gameId} gameStatus={gameInfo.status} />
       </Stack>
       {showConfirm && (
         <Dialog open={showConfirm} onClose={() => setShowConfirm(false)}>

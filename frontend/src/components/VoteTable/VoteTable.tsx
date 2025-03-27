@@ -18,11 +18,9 @@ import { AuthContext } from "../../contexts/AuthContext";
 const VoteTable = ({
   gameId,
   gameStatus,
-  voteCorrect,
 }: {
   gameId: string;
   gameStatus: GameStatus;
-  voteCorrect?: boolean;
 }) => {
   const { data: votes, isLoading } = trpc.vote.getVotesByGame.useQuery({
     gameId,

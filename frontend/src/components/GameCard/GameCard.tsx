@@ -189,7 +189,6 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
                 gameInfo={gameInfo}
                 closeDialog={() => setOpen(false)}
                 votingClosed={!!vote || gameInfo.status.state != "PREVIEW"}
-                voteCorrect={voteCorrect}
               />
             </motion.div>
           </Dialog>
