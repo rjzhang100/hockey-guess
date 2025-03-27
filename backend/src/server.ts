@@ -18,7 +18,7 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = FRONTEND_ORIGINS.split("");
+const allowedOrigins = FRONTEND_ORIGINS.split(",");
 
 app.use(
   cors({
