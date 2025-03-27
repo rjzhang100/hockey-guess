@@ -23,15 +23,19 @@ const allowedOrigins = FRONTEND_ORIGINS.split("");
 app.use(
   cors({
     origin: (origin, callback) => {
+      console.log(origin);
+      console.log(allowedOrigins);
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("blocked by cors"));
+        callback(new Error("Blocked by CORS"));
       }
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Allow all relevant HTTP methods
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
