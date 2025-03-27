@@ -21,6 +21,7 @@ export const publicProcedure = t.procedure;
 export const protectedProcedure = t.procedure.use(async (opts) => {
   const { req } = opts.ctx;
   const token = req.cookies[CONSTS.TOKEN_COOKIE_KEY];
+  console.log(token);
   if (!token) {
     throw new TRPCError({
       code: "UNAUTHORIZED",

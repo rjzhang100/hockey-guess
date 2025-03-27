@@ -41,7 +41,7 @@ const Login = () => {
       });
     },
     onSuccess() {
-      navigate(routes.HOME);
+      navigate(routes.ROOT);
     },
   });
 

@@ -7,13 +7,16 @@ const RequireAuth = () => {
     undefined,
     { refetchOnMount: "always", retry: false }
   );
-
-  if (isError || (!isLoading && !data?.loggedIn)) {
-    return <Navigate to={routes.LOGIN} replace />;
-  }
+  console.log("REQUIRE AUTH");
 
   if (isLoading) {
     return <>Loading...</>;
+  }
+
+  console.log(data, isError);
+
+  if (isError || (!isLoading && !data?.loggedIn)) {
+    return <Navigate to={routes.LOGIN} replace />;
   }
 
   return <Outlet />;

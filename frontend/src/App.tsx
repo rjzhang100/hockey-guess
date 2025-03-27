@@ -59,12 +59,8 @@ const App = () => {
       element: <RequireAuth />,
       children: [
         {
-          path: routes.HOME,
+          path: routes.ROOT,
           element: <Home />,
-        },
-        {
-          path: "/asd",
-          element: <>HI</>,
         },
       ],
     },

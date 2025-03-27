@@ -15,8 +15,8 @@ interface AuthProviderProps {
 
 const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<any>(null);
-
   const { data, isLoading } = trpc.auth.getSignedInUser.useQuery();
+  console.log("hit auth provider");
 
   useEffect(() => {
     if (!isLoading) {
