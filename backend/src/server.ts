@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { ServerApiVersion } from "mongodb";
-import { CERT, FRONTEND_ORIGIN, MONGODB_URI, PORT } from "./consts/env";
+import { CERT, FRONTEND_ORIGINS, MONGODB_URI, PORT } from "./consts/env";
 import mongoose from "mongoose";
 import { createContext, router } from "./trpc/trpc";
 import userRouter from "./api/userRoutes";
@@ -18,11 +18,17 @@ dotenv.config();
 
 const app = express();
 
-console.log("CORS ALLOWING:", FRONTEND_ORIGIN);
+const allowedOrigins = FRONTEND_ORIGINS.split("");
 
 app.use(
   cors({
-    origin: FRONTEND_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("blocked by cors"));
+      }
+    },
     credentials: true,
   })
 );
