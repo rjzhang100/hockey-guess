@@ -1,8 +1,9 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Box, Divider, Tab, Tabs, Typography } from "@mui/material";
 import { useState } from "react";
 import GamePage from "../../components/GamePage/GamePage";
 import { DAYS } from "../../constants/consts";
 import UserStats from "../../components/UserStats/UserStats";
+import { COLOURS } from "../../constants/styles";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -58,6 +59,22 @@ const Home = () => {
       <CustomTabPanel index={4} value={tabValue}>
         <UserStats />
       </CustomTabPanel>
+      <Divider
+        sx={{
+          marginY: "2rem",
+        }}
+      />
+      <Box
+        display="flex"
+        color={COLOURS.GREY_BACK_SHADE}
+        justifyContent="center"
+        marginBottom="2rem"
+      >
+        <Typography variant="body2">
+          All logos belong to their respective owners. Not affiliated in any way
+          with the NHL.
+        </Typography>
+      </Box>
     </>
   );
 };
