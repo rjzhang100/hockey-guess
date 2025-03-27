@@ -18,6 +18,8 @@ dotenv.config();
 
 const app = express();
 
+console.log("CORS ALLOWING:", FRONTEND_ORIGIN);
+
 app.use(
   cors({
     origin: FRONTEND_ORIGIN,
