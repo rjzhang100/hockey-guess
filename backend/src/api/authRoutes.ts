@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { JWT_SECRET } from "../consts/env";
+import { ENV, JWT_SECRET } from "../consts/env";
 import User from "../models/User";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import {
@@ -41,8 +41,8 @@ const loginUser = async (userData: any, ctx: Context) => {
     );
     ctx.res.cookie(CONSTS.TOKEN_COOKIE_KEY, token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: ENV == "prod",
+      sameSite: ENV == "prod" ? "none" : "strict",
       maxAge: 60 * 60 * 1000,
     });
     return user;

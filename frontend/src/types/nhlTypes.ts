@@ -63,13 +63,7 @@ export interface ShootoutGoal {
   team: string;
 }
 
-export interface GameScores {
-  home: number;
-  away: number;
-  overtime?: boolean;
-  shootout?: boolean;
-}
-
+export type GameScores = Record<string, number>;
 export interface GameTeams {
   away: TeamInfo;
   home: TeamInfo;

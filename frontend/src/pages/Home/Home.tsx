@@ -35,6 +35,8 @@ const Home = () => {
     <>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
+          variant="scrollable"
+          allowScrollButtonsMobile
           value={tabValue}
           onChange={(_, newValue) => handleChange(newValue)}
         >

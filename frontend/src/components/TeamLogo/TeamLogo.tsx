@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { FC } from "react";
 import { trpc } from "../../utils/trpc";
 
@@ -18,12 +18,14 @@ const TeamLogo: FC<ITeamLogoProps> = ({ teamAbbrv, logoTheme }) => {
   }
 
   return (
-    <img
-      style={{
-        width: "150px",
-      }}
-      src={`data:image/svg+xml;utf8,${encodeURIComponent(data)}`}
-    />
+    <Box width={["100px", "150px"]}>
+      <img
+        style={{
+          width: "100%",
+        }}
+        src={`data:image/svg+xml;utf8,${encodeURIComponent(data)}`}
+      />
+    </Box>
   );
 };
 

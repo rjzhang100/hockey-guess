@@ -10,7 +10,7 @@ interface IGameGridProps {
 
 const GameGrid: FC<IGameGridProps> = ({ gameData: data }) => {
   return (
-    <Grid2 container spacing={3}>
+    <Grid2 container spacing={2} justifyContent="center">
       {data.games.map((game) => (
         <Grid2
           key={hashGameData({
@@ -18,9 +18,11 @@ const GameGrid: FC<IGameGridProps> = ({ gameData: data }) => {
             away: game.teams.away,
             date: data.date.raw,
           })}
+          width="100%"
+          height="100%"
           size={{
-            xs: 12,
-            sm: 6,
+            sm: 12,
+            md: 5,
           }}
         >
           <GameCard

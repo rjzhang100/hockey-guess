@@ -18,7 +18,10 @@ import GameCardTeamInfo from "../GameCardTeamInfo/GameCardTeamInfo";
 import { trpc } from "../../utils/trpc";
 import StatusPill from "../StatusPill/StatusPill";
 import { getWinner } from "../../utils/utils";
-import { teamAbbrvToLocation } from "../../constants/consts";
+import {
+  teamAbbrvToLocation,
+  teamAbbrvToTeamName,
+} from "../../constants/consts";
 import { COLOURS } from "../../constants/styles";
 
 interface IGameCardProps {
@@ -41,6 +44,8 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
   });
   const tallyMutation = trpc.vote.tallyVotesForGame.useMutation();
 
+  console.log(gameInfo);
+
   const hasRun = useRef(false);
 
   useEffect(() => {
@@ -56,17 +61,25 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
   }, []);
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <CircularProgress
+        sx={{
+          alignSelf: "center",
+        }}
+      />
+    );
   }
   const vote = data as any | undefined;
   const voteCorrect = !!vote
     ? vote.votedFor == teamAbbrvToLocation[getWinner(gameInfo)]
     : undefined;
 
+  console.log(vote);
+
   const getStatusText = () => {
     switch (gameInfo.status.state) {
       case "FINAL":
-        return `Winner: ${getWinner(gameInfo)}`;
+        return `Winner: ${teamAbbrvToTeamName[getWinner(gameInfo)]}`;
       case "LIVE":
         return `P${gameInfo.status.progress?.currentPeriod}: ${gameInfo.status.progress?.currentPeriodTimeRemaining.pretty} left`;
       case "PREVIEW":
@@ -115,6 +128,8 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
                 teamAbbrv={gameInfo.teams.home.abbreviation}
                 locationName={gameInfo.teams.home.locationName}
                 teamName={gameInfo.teams.home.teamName}
+                score={gameInfo.scores[gameInfo.teams.home.abbreviation]}
+                gameStarted={gameInfo.status.state != "PREVIEW"}
               />
             </Grid2>
             <Grid2
@@ -133,6 +148,8 @@ const GameCard: FC<IGameCardProps> = ({ gameInfo, gameId }) => {
                 teamAbbrv={gameInfo.teams.away.abbreviation}
                 locationName={gameInfo.teams.away.locationName}
                 teamName={gameInfo.teams.away.teamName}
+                score={gameInfo.scores[gameInfo.teams.away.abbreviation]}
+                gameStarted={gameInfo.status.state != "PREVIEW"}
               />
             </Grid2>
           </Grid2>

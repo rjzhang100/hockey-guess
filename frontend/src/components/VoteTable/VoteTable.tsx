@@ -28,7 +28,6 @@ const VoteTable = ({
     gameId,
   });
   const { user: thisUser } = useContext(AuthContext);
-
   if (isLoading) {
     return <CircularProgress />;
   }
@@ -46,11 +45,13 @@ const VoteTable = ({
     );
   }
 
-  const getBackgroundColour = () => {
-    if (gameStatus.state != "FINAL") {
-      return COLOURS.WHITE;
+  const getBackgroundColour = (voteUser: string) => {
+    if (voteUser == thisUser.name) {
+      return COLOURS.GREY_BACK_SHADE;
     }
-    return voteCorrect ? COLOURS.SUCCESS_GREEN : COLOURS.ERROR_RED;
+    if (gameStatus.state != "FINAL") {
+      return "white";
+    }
   };
 
   return (
@@ -72,7 +73,7 @@ const VoteTable = ({
             <TableRow
               key={vote._id}
               sx={{
-                backgroundColor: getBackgroundColour(),
+                backgroundColor: getBackgroundColour(vote.userName),
               }}
             >
               <TableCell align="center">{`${vote.userName} ${

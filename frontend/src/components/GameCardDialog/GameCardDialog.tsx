@@ -15,6 +15,8 @@ import { toast } from "react-toastify";
 import { errorMap } from "../../constants/errorMap";
 import { AuthContext } from "../../contexts/AuthContext";
 import VoteTable from "../VoteTable/VoteTable";
+import { teamAbbrvToTeamName } from "../../constants/consts";
+import { getWinner } from "../../utils/utils";
 
 interface IGameCardDialogProps {
   gameId: string;
@@ -78,6 +80,18 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
             marginTop: "2rem",
           }}
         >
+          <Grid2 size={12}>
+            <Typography
+              marginBottom="1rem"
+              variant="h5"
+              display="flex"
+              justifyContent="center"
+            >
+              {gameInfo.status.state == "FINAL"
+                ? `WINNER: ${teamAbbrvToTeamName[getWinner(gameInfo)]}`
+                : ""}
+            </Typography>
+          </Grid2>
           <Grid2 size={5}>
             <Stack gap={"1rem"}>
               <GameCardTeamInfo
@@ -86,6 +100,8 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
                 teamName={gameInfo.teams.home.teamName}
                 side="Home"
                 theme="light"
+                gameStarted={gameInfo.status.state != "PREVIEW"}
+                score={gameInfo.scores[gameInfo.teams.home.abbreviation]}
               />
               {!votingClosed && (
                 <Button
@@ -106,8 +122,10 @@ const GameCardDialog: FC<IGameCardDialogProps> = ({
                 teamAbbrv={gameInfo.teams.away.abbreviation}
                 locationName={gameInfo.teams.away.locationName}
                 teamName={gameInfo.teams.away.teamName}
+                score={gameInfo.scores[gameInfo.teams.away.abbreviation]}
                 side="Away"
                 theme="light"
+                gameStarted={gameInfo.status.state != "PREVIEW"}
               />
               {!votingClosed && (
                 <Button

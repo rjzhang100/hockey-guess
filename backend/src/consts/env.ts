@@ -10,3 +10,4 @@ export const NHL_LOGOS_API = process.env.NHL_LOGOS_API as string;
 export const FRONTEND_ORIGINS = (process.env.FRONTEND_ORIGINS ??
   "http:localhost:5173") as string;
 export const CERT = process.env.CERT as string;
+export const ENV = (process.env.ENV || "dev") as string;

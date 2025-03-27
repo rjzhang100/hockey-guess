@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { ServerApiVersion } from "mongodb";
-import { CERT, FRONTEND_ORIGINS, MONGODB_URI, PORT } from "./consts/env";
+import { CERT, ENV, FRONTEND_ORIGINS, MONGODB_URI, PORT } from "./consts/env";
 import mongoose from "mongoose";
 import { createContext, router } from "./trpc/trpc";
 import userRouter from "./api/userRoutes";
@@ -18,7 +18,13 @@ dotenv.config();
 
 const app = express();
 
-const allowedOrigins = FRONTEND_ORIGINS.split(",");
+let allowedOrigins;
+
+if (ENV == "prod") {
+  allowedOrigins = FRONTEND_ORIGINS.split(",");
+} else {
+  allowedOrigins = ["http://localhost:5173"];
+}
 
 app.use(
   cors({

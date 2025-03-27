@@ -14,9 +14,6 @@ export const hyphenateAndLowercase = (inputString: string) =>
 
 export const getWinner = (gameInfo: any) => {
   const [team1, team2] = Object.keys(gameInfo.scores);
-  if (gameInfo.scores[team1] == gameInfo.scores[team2]) {
-    return "TIE";
-  }
   return `${gameInfo.scores[team1] > gameInfo.scores[team2] ? team1 : team2}`;
 };
 

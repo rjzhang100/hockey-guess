@@ -27,7 +27,13 @@ const GamePage: FC<IGamePageProps> = ({ day }) => {
   });
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <CircularProgress
+        sx={{
+          alignSelf: "center",
+        }}
+      />
+    );
   }
 
   const gameData = (data as NHLApiResponse).at(0);
@@ -37,7 +43,7 @@ const GamePage: FC<IGamePageProps> = ({ day }) => {
   }
 
   return (
-    <Stack alignItems="center" rowGap="1rem">
+    <Stack alignItems="center" rowGap="1rem" padding={0}>
       <Typography variant="h4">{`${day}'s Games`}</Typography>
       <Typography variant="h5">{gameData.date.pretty}</Typography>
       <GameGrid gameData={gameData} />
